@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e8f5f3 0%, #f8f9fa 100%);
+            margin: 0;
+        }
+        .loader {
+            text-align: center;
+            color: #2c8577;
+        }
+        .spinner {
+            border: 4px solid #e8f5f3;
+            border-top: 4px solid #2c8577;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .message {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="loader">
+        <div class="spinner"></div>
+        <div class="message">Redirecting...</div>
+    </div>
+
+    <script>
+        (function() {
+            // Get the current path
+            const path = window.location.pathname;
+            const parts = path.split('/').filter(p => p);
+            
+            // Remove .html extension if present
+            const cleanParts = parts.map(p => p.replace('.html', ''));
+            
+            // Route based on the first segment
+            if (cleanParts.length >= 1) {
+                const section = cleanParts[0].toLowerCase();
+                const slug = cleanParts[1] || '';
+                
+                // Map routes
+                const routes = {
+                    'service': 'service.html',
+                    'services': 'service.html',
+                    'doctor': 'doctor.html',
+                    'doctors': 'doctor.html',
+                    'product': 'product.html',
+                    'products': 'product.html',
+                    'article': 'article.html',
+                    'articles': 'articles.html',
+                    'admin': 'admin.html',
+                    'prescription': 'prescription.html'
+                };
+                
+                if (routes[section]) {
+                    // If there's a slug, append it as a query parameter
+                    if (slug) {
+                        window.location.replace('/' + routes[section] + '?s=' + slug);
+                    } else {
+                        // If no slug, just go to the list page
+                        const listPages = {
+                            'service': 'services.html',
+                            'services': 'services.html',
+                            'doctor': 'doctors.html',
+                            'doctors': 'doctors.html',
+                            'product': 'products.html',
+                            'products': 'products.html',
+                            'article': 'articles.html',
+                            'articles': 'articles.html'
+                        };
+                        
+                        if (listPages[section]) {
+                            window.location.replace('/' + listPages[section]);
+                        } else {
+                            window.location.replace('/' + routes[section]);
+                        }
+                    }
+                } else {
+                    // Not a known route, go to home
+                    window.location.replace('/index.html');
+                }
+            } else {
+                // Root 404, go to home
+                window.location.replace('/index.html');
+            }
+        })();
+    </script>
+</body>
+</html>
